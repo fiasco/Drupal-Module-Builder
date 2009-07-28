@@ -1,0 +1,13 @@
+Source: drupal-module-builder
+Section: devel
+Priority: optional
+Maintainer: Joshua Waihi <>
+Build-Depends: debhelper (>= 5)
+Standards-Version: 3.7.2
+
+Package: drupal-module-builder
+Architecture: all
+Depends: ${misc:Depends}, php5-cli
+Description: A simple PHP based script designed to help make 
+ building Drupal modules faster by streamlining the initial 
+ process.

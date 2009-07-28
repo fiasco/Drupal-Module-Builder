@@ -10,7 +10,7 @@
  */
 
 define('CORE', '6.x');
-define('API_LIB', '/home/josh/projects/drupal_mod_builder/apis');
+define('API_LIB', '/var/lib/drupal-module-builder/apis');
 
 
 /**
@@ -164,8 +164,8 @@ function build_module() {
       $info .= "$key = $value" . PHP_EOL;
     }
   }
-  $info .= 'core = ' . CORE;
-  $info .= 'version = ' . CORE . '-1.x-dev';
+  $info .= 'core = ' . CORE . PHP_EOL;
+  $info .= 'version = ' . CORE . '-1.x-dev' . PHP_EOL;
   file_put_contents($dir . "/$name.info", $info);
   
   //Create .module and .install files
