@@ -1,0 +1,65 @@
+#!/usr/bin/php
+<?php
+
+/**
+ * Drupal Module Builder
+ * 
+ * Simple command line package to help create the base of a new module
+ * 
+ * @author Josh Waihi (http://geek.joshwaihi.com/)
+ */
+
+define('CORE', '6.x');
+define('API_LIB', '/home/josh/projects/drupal_mod_builder/apis');
+
+
+/**
+ * Wrapper function for asking questions to the user.
+ * 
+ * The idea is to later add support so libreadline is not required.
+ */
+function ask_question($question) {
+  return readline($question);
+}
+
+/**
+ * Ask a required question the the user.
+ */
+function require_answer($question) {
+  $value = ask_question($question);
+  if (empty($value)) {
+    echo "This is a required value. Please answer provide a value.\n";
+    return require_answer($question);
+  }
+  return $value;
+}
+
+/**
+ * Get a list of supported hooks
+ */
+function get_hooks() {
+  
+}
+
+/**
+ * Build information about the new mdoule
+ */
+function get_module_info() {
+  $info = array(
+    'name' => require_answer("What is the title of your module?: "),
+    'description' => ask_question("Write a summary of what your module does: "),
+    'package' => require_answer("What package is your module apart of? Use 'Other' if your unsure: "),
+    'dependencies' => ask_question("Please list any dependencies seperated by a space e.g menu taxonomy view: "),
+  );
+  if (!empty($info['dependencies'])) {
+    $info['dependencies'] = explode(' ', $info['dependencies']);
+    foreach ($info['dependencies'] as &$value) {
+      $value = trim($value);
+      if (empty($value)) {
+        unset($value);
+      }
+    }
+  }
+  return $info;
+}
+
