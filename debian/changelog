@@ -1,5 +1,5 @@
-drupal-module-builder (1.x-6.x) unstable; urgency=low
+drupal-module-builder (1.0-dev) unstable; urgency=low
 
   * Debianised by Joshua Waihi
 
- -- Joshua Waihi <josh@catalyst.net.nz>  Tue, 28 Jul 2009 19:24:28 +0000
+ -- Joshua Waihi <josh@lupe>  Tue, 28 Jul 2009 20:42:59 +1200
