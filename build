@@ -103,7 +103,7 @@ function get_module_info() {
     'name' => require_answer("What is the title of your module?: "),
     'description' => ask_question("Write a summary of what your module does: "),
     'package' => require_answer("What package is your module apart of? Use 'Other' if your unsure: "),
-    'dependencies' => ask_question("Please list any dependencies seperated by a space e.g menu taxonomy view: "),
+    'dependencies' => ask_question("Please list any dependencies seperated by a space e.g menu taxonomy views: "),
   );
   if (!empty($info['dependencies'])) {
     $info['dependencies'] = _string_to_array($info['dependencies']);
@@ -159,9 +159,30 @@ function build_module() {
       }
     }
     else {
-      $info .= 
+      $info .= "$key = $value" . PHP_EOL;
     }
   }
+  $info .= "version = " . CORE;
+  file_put_contents($dir . "/$name.info", $info);
   
+  //Create .module and .install files
+  $hooks = get_hooks();
+  foreach (get_implemented_hooks() as $hook) {
+    $file = in_array($hook, array('install', 'uninstall', 'schema', 'requirements')) ? 'install' : 'module';
+    $function  = PHP_EOL;
+    $function .= '/**' . PHP_EOL;
+    $function .= ' * Implementation of hook_' . $hook . PHP_EOL;
+    $function .= ' */' . PHP_EOL;
+    $args = isset($hooks[$hook]) ? $hooks[$hook] : '';
+    $function .= "function {$name}_{$hook} ($args) {" . PHP_EOL . PHP_EOL;
+    $function .= '}' . PHP_EOL;
+    if (!file_exists("$dir/$name.$file")) {
+      file_put_contents("$dir/$name.$file", '<?php ' . PHP_EOL);
+    }
+    file_put_contents("$dir/$name.$file", $function, FILE_APPEND | LOCK_EX);
+  }
+  echo "Module '$name' created in $dir.\n";
 }
+
+build_module();
 
