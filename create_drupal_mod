@@ -12,6 +12,55 @@
 define('CORE', '6.x');
 define('API_LIB', '/var/lib/drupal-module-builder/apis');
 
+/**
+ * Help
+ */
+function help() {
+  $file = basename(__FILE__);
+  echo "
+  Drupal Module Builder
+  
+  $file helps create quick drupal module skeletons to save you a lot
+  of typing. It creates .info, .install and .module files inside a 
+  folder that you sepcify the location of. $file allows you to specify
+  which hooks you want to use and provides tab completetion for them.
+  
+  Usage: 
+    $file --core [CORE]
+      - Create a module for version [CORE] of Drupal (numeric: 5,6 or 7). Defaults to 6
+    $file --help
+      - Show this help message
+  Parameters:
+    --core      which major version of core the hooks apply too.
+    --api-lib   define an alternative api lib to read hooks from.
+
+";
+  die;
+}
+
+/**
+ * Parse the arguments passed to the script
+ */
+function args($key) {
+  static $args;
+  if ($args != NULL) {
+    return $args[$key];
+  }
+  $args = array();
+  
+  // Get rid of the first argument, its the script name.
+  array_shift($_SERVER['argv']);
+  while ($param = array_shift($_SERVER['argv'])) {
+    if (strpos($param, '--') !== FALSE) {
+      $param = str_replace('--', '', $param);
+      $args[$param] = array_shift($_SERVER['argv']);
+      if ($param == 'help') {
+        $args[$param] = TRUE;
+      }
+    }
+  }
+  return isset($args[$key]) ? $args[$key] : FALSE;
+}
 
 /**
  * Wrapper function for asking questions to the user.
@@ -42,15 +91,23 @@ function get_hooks() {
   if (!empty($hooks)) {
     return $hooks;
   }
-  if (!is_dir(API_LIB)) {
-    return array();
+  if (!$core = (int) args('core')) {
+    $core = 6;
   }
-  if (!$handle = opendir(API_LIB)) {
+  $LIB = API_LIB . $core;
+  if (args('api-lib')) {
+    $LIB = args('api-lib');
+  }
+  if (!is_dir($LIB)) {
+    return array('Diretory does not exist.');
+  }
+  echo 'LIB: ' . $LIB . "\n";
+  if (!$handle = opendir($LIB)) {
     $hooks = array();
     return $hooks;
   }
   while (false !== ($file = readdir($handle))) {
-      $file = file_get_contents(API_LIB . '/' . $file);
+      $file = file_get_contents($LIB . '/' . $file);
       if (!preg_match_all('/function hook_([^\(\s]+)\(([^\)]*)\)/mi', $file, $matches)) {
         continue;
       }
@@ -187,5 +244,9 @@ function build_module() {
   echo "Module '$name' created in $dir.\n";
 }
 
+if (args('help')) help();
+
+
 build_module();
+
 
