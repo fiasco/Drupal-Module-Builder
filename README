@@ -1,0 +1,11 @@
+Drupal Module Builder is a command line tool for building 
+drupal modules. It currently supports Drupal 6 but has room 
+to support Drupal versions above and below. The script is
+written with PHP and requires php-cli utilities and libreadline
+
+There is a debian folder included to build debian packages 
+form source - no Linux or Windows implementations yet, though
+it should be easy enough to do as all you need is php-cli and 
+libreadline
+
+This is GNU General Public License, version 2 and later.
