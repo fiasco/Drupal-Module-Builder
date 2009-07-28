@@ -1,3 +1,9 @@
+drupal-module-builder (1.1.x-dev) karmic; urgency=low
+
+  * added support for branching to different versions of Drupal 
+
+ -- Joshua Waihi <josh@lupe>  Tue, 28 Jul 2009 20:44:49 +1200
+
 drupal-module-builder (1.0-dev) unstable; urgency=low
 
   * Debianised by Joshua Waihi
