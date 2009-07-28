@@ -88,6 +88,7 @@ function _string_to_array($str) {
   $array = explode(' ', $str);
   foreach ($array as &$chunk) {
     $chunk = trim($chunk);
+    $chunk = strtr($chunk, array(',' => ''));
     if (empty($chunk)) {
       unset($chunk);
     }
@@ -115,6 +116,7 @@ function get_module_info() {
  * Get Drupal Hooks user wishes to implement.
  */
 function get_implemented_hooks() {
+  readline_completion_function('drupal_module_builder_hook_tab_completetion');
   $hooks = readline("Please add any hooks you want to implement, you can add more later. Seperate them with spaces: ");
   if (empty($hooks)) {
     return array();
