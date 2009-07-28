@@ -164,7 +164,8 @@ function build_module() {
       $info .= "$key = $value" . PHP_EOL;
     }
   }
-  $info .= "version = " . CORE;
+  $info .= 'core = ' . CORE;
+  $info .= 'version = ' . CORE . '-1.x-dev';
   file_put_contents($dir . "/$name.info", $info);
   
   //Create .module and .install files
