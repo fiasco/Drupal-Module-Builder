@@ -1,0 +1,70 @@
+#!/usr/bin/php
+<?php
+// $Id$
+
+/**
+ * Drupal shell execution script
+ *
+ * Check for your PHP interpreter - on Windows you'll probably have to
+ * replace line 1 with
+ *   #!c:/program files/php/php.exe
+ *
+ * @param path  Drupal's absolute root directory in local file system (optional).
+ * @param URI   A URI to execute, including HTTP protocol prefix.
+ */
+
+/**
+ * Define home directory, a place to save cli history too.
+ */
+define('HOME_DIR', exec('cd ~/; pwd'));
+
+/**
+ * Location where drizzle library is located
+ */
+define('DRIZZLE_LIB', HOME_DIR . '/projects/drizzle/lib');
+
+/**
+ * Name of history file.
+ */
+define('HISTORY_FILE', HOME_DIR . '/.drupal-cli_history');
+
+// Load every file from lib directory. Do this dynamically so additional 
+// libraries are easy to add to the framework.
+if (!$handle = opendir(DRIZZLE_LIB)) {
+  die('Missing Drizzle lib. Expected in ' . DRIZZLE_LIB . "\n");
+}
+
+// Load libraries that provide the functionality for Drizzle.
+$drizzle_libs = array();
+while (false !== ($file = readdir($handle))) {
+  if (is_file(DRIZZLE_LIB . "/$file")) {
+    $drizzle_libs[] = array_shift(explode('.', $file));
+    include_once DRIZZLE_LIB . '/' . $file;
+  }
+}
+
+// define default settings
+$cmd = 'index.php';
+$_SERVER['HTTP_HOST']       = args('url') ? args('url') : 'drupal.org';
+$_SERVER['HTTP_USER_AGENT'] = 'drizzle';
+$_SERVER['PHP_SELF']        = '/index.php';
+$_SERVER['SCRIPT_NAME']     = '/index.php';
+$_SERVER['REMOTE_ADDR']     = '127.0.0.1';
+$_SERVER['SERVER_SOFTWARE'] = 'PHP CLI';
+$_SERVER['REQUEST_METHOD']  = 'GET';
+$_SERVER['QUERY_STRING']    = '';
+$_SERVER['PHP_SELF']        = $_SERVER['REQUEST_URI'] = '/';
+
+// Change directory to Drupal root.
+if (args('root')) {
+  chdir(args('root'));
+}
+
+/**
+ * Root directory of Drupal installation.
+ */
+define('DRUPAL_ROOT', getcwd());
+
+drupal_cli_bootstrap();
+// Go into interactove mode.
+drupal_cli_prompt();
