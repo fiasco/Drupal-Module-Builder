@@ -1,18 +1,5 @@
-drupal-module-builder (1.1.0) karmic; urgency=low
-
-  * merged a Drupal Cli tool I had into module builder.
-  * Tool is now interactive and more than just a module builder 
-
- -- Joshua Waihi <josh@lupe>  Mon, 03 Aug 2009 15:47:19 +1200
-
-drupal-module-builder (1.0.1) karmic; urgency=low
-
-  * added support for branching to different versions of Drupal 
-
- -- Joshua Waihi <josh@lupe>  Tue, 28 Jul 2009 20:44:49 +1200
-
-drupal-module-builder (1.0.0) unstable; urgency=low
+drupal-drizzle (1.0.0) unstable; urgency=low
 
   * Debianised by Joshua Waihi
 
- -- Joshua Waihi <josh@lupe>  Tue, 28 Jul 2009 20:42:59 +1200
+ -- Joshua Waihi <josh@joshwaihi.com>  Tue, 28 Jul 2009 20:42:59 +1200

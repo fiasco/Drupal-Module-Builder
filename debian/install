@@ -1,2 +1,3 @@
 create_drupal_mod                     usr/sbin
-apis                                  var/lib/drupal-module-builder/
+apis                                  var/lib/drizzle/
+lib                                   var/lib/drizzle/
