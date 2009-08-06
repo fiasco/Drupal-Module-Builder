@@ -82,6 +82,23 @@ function _string_to_array($str) {
 }
 
 /**
+ * Drupal cli tab completetion
+ */
+function drupal_cli_tab_complete($search_str) {
+  global $drizzle_libs;
+  $results = array();
+  foreach ($drizzle_libs as $lib) {
+    $return = drupal_cli_invoke('tab_complete', $lib, $search_str);
+    if (!is_array($return)) {
+      continue;
+    }
+    $results += $return;
+  }
+  sort($results);
+  return empty($results) ? array($search_str) : $results;
+}
+
+/**
  * Drizzle Cli hook tool
  */
 function drupal_cli_invoke($hook, $lib) {
@@ -107,6 +124,7 @@ function drupal_cli_bootstrap() {
  * Supply user with command prompt
  */
 function drupal_cli_prompt() {
+  readline_completion_function('drupal_cli_tab_complete');
   // If there is no protocol in the http, add one.
   if (!strpos($_SERVER['HTTP_HOST'], '://')) {
     $_SERVER['HTTP_HOST'] = 'http://' . $_SERVER['HTTP_HOST'];
@@ -193,6 +211,32 @@ function cli_help() {
     '\d' => 'Dump: Dump the return information from a function: \d print_r($_SERVER,1)',
     '\f' => 'File: include a file relative to document root or absoulte path',
   );
+}
+
+/**
+ * Implements hook_tab_complete.
+ *
+ * Simply reads the directory paths below the document root
+ */
+function cli_tab_complete($search) {
+  $depth = explode('/', $search);
+  if (count($depth) >1) {
+    $search = array_pop($depth);
+    $dir = implode('/', $depth);
+  }
+  else {
+    $dir = getcwd();
+  }
+  if (!$handle = opendir($dir)) {
+    return array();
+  }
+  $results = array();
+  while (false !== ($file = readdir($handle))) {
+    if ((strpos($file, $search) !== FALSE) || empty($search)) {
+      $results[] = $file;
+    }
+  }
+  return $results;
 }
 
 /**

@@ -19,9 +19,14 @@
 define('HOME_DIR', exec('cd ~/; pwd'));
 
 /**
+ * Location of Drizzle source
+ */
+define('DRIZZLE', '/var/lib/drizzle');
+
+/**
  * Location where drizzle library is located
  */
-define('DRIZZLE_LIB', '/var/lib/drizzle');
+define('DRIZZLE_LIB', DRIZZLE . '/lib');
 
 /**
  * Name of history file.

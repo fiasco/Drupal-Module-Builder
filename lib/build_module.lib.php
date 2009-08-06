@@ -8,9 +8,11 @@
  * @author Josh Waihi (http://geek.joshwaihi.com/)
  */
 
-define('CORE', '6.x');
-define('API_LIB', '/var/lib/drupal-module-builder/apis');
+define('API_LIB', DRIZZLE . '/apis');
 
+/**
+ * Implementation of hook_tools
+ */
 function build_module_tools() {
   return array(
     '\mb' => 'build_module',
@@ -57,12 +59,12 @@ function build_module_get_hooks() {
   if (!$core = (int) args('core')) {
     $core = 6;
   }
-  $LIB = API_LIB . $core;
+  $LIB = API_LIB . '/' . $core;
   if (args('api-lib')) {
     $LIB = args('api-lib');
   }
   if (!is_dir($LIB)) {
-    return array('Diretory does not exist.');
+    return array('Diretory ' . $LIB . ' does not exist.');
   }
   if (!$handle = opendir($LIB)) {
     $hooks = array();
@@ -122,6 +124,8 @@ function build_module_get_module_info() {
 function build_module_get_implemented_hooks() {
   readline_completion_function('build_module_hook_tab_completetion');
   $hooks = readline("Please add any hooks you want to implement, you can add more later. Seperate them with spaces: ");
+  // Revert back to normal.
+  readline_completion_function('drupal_cli_tab_complete');
   if (empty($hooks)) {
     return array();
   }
