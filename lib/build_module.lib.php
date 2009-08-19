@@ -138,6 +138,9 @@ function build_module_get_implemented_hooks() {
  */
 function build_module_get_module_location() {
   $root = exec('pwd');
+  if (is_dir($root . '/sites/all/modules')) {
+    $root .= '/sites/all/modules';
+  }
   $location = ask_question("Where do you want to place this Module? [$root] ");
   if (empty($location)) {
     $location = $root;
@@ -172,8 +175,8 @@ function build_module() {
       $info .= "$key = $value" . PHP_EOL;
     }
   }
-  $info .= 'core = ' . CORE . PHP_EOL;
-  $info .= 'version = ' . CORE . '-1.x-dev' . PHP_EOL;
+  $info .= 'core = ' . DRUPAL_CORE_COMPATIBILITY . PHP_EOL;
+  $info .= 'version = ' . DRUPAL_CORE_COMPATIBILITY . '-1.x' . PHP_EOL;
   file_put_contents($dir . "/$name.info", $info);
   
   //Create .module and .install files
