@@ -64,7 +64,9 @@ $_SERVER['PHP_SELF']        = $_SERVER['REQUEST_URI'] = '/';
 if (args('root')) {
   chdir(args('root'));
 }
-
+else {
+  drupal_cli_root_dir();
+}
 /**
  * Root directory of Drupal installation.
  */

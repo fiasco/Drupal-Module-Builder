@@ -1,3 +1,4 @@
 drizzle                               usr/sbin
-apis                                  var/lib/drizzle/
-lib                                   var/lib/drizzle/
+apis                                  var/lib/drizzle
+lib                                   var/lib/drizzle
+drush                                 var/lib/drizzle

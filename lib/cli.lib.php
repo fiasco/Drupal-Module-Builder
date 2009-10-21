@@ -121,6 +121,17 @@ function drupal_cli_bootstrap() {
 }
 
 /**
+ * Find Drupal root directory
+ */
+function drupal_cli_root_dir($dir = '.') {
+  chdir($dir);
+  if (file_exists('index.php') && file_exists('index.php') && is_dir('includes')) {
+    return $dir;
+  }
+  return drupal_cli_root_dir("$dir/..");
+}
+
+/**
  * Supply user with command prompt
  */
 function drupal_cli_prompt() {
