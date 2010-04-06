@@ -1,3 +1,9 @@
+drupal-drizzle (20100407-1) karmic; urgency=low
+
+  * updated history writing to write after every command. 
+
+ -- Josh Waihi <josh@lupe.wgtn.cat-it.co.nz>  Wed, 07 Apr 2010 11:01:26 +1200
+
 drupal-drizzle (1.0.0) unstable; urgency=low
 
   * Debianised by Joshua Waihi

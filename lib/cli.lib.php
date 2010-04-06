@@ -125,10 +125,10 @@ function drupal_cli_bootstrap() {
  */
 function drupal_cli_root_dir($dir = '.') {
   chdir($dir);
-  if (file_exists('index.php') && file_exists('index.php') && is_dir('includes')) {
+  if (file_exists('index.php') && file_exists('update.php') && is_dir('includes')) {
     return $dir;
   }
-  return drupal_cli_root_dir("$dir/..");
+  return drupal_cli_root_dir("..");
 }
 
 /**
@@ -184,6 +184,7 @@ function drupal_cli_prepare(&$line) {
     }
   }
   readline_add_history($line);
+  cli_write_history();
   // Check if this is a tool.
   if (substr($line, 0, 1) == '\\') {
     list($tool, $command) = explode(' ', $line, 2);
@@ -254,14 +255,21 @@ function cli_tab_complete($search) {
  * Exit Drizzle
  */
 function drupal_cli_exit() {
-  if (!file_exists(HISTORY_FILE)) { 
+  if (!cli_write_history()) {
+    notify("Can't save history to " . HISTORY_FILE);
+  }
+  die('Drizzle session ended.' . "\n");
+}
+
+function cli_write_history() {
+  if (!file_exists(HISTORY_FILE)) {·
     touch(HISTORY_FILE);
     chmod(HISTORY_FILE, 0777);
   }
   if (!file_exists(HISTORY_FILE) || !readline_write_history(HISTORY_FILE)) {
-    notify("Can't save history to " . HISTORY_FILE);
+    return FALSE;
   }
-  die('Drizzle session ended.' . "\n");
+  return TRUE;
 }
 
 /**

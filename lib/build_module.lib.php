@@ -115,6 +115,9 @@ function build_module_get_module_info() {
   if (!empty($info['dependencies'])) {
     $info['dependencies'] = _string_to_array($info['dependencies']);
   }
+  else {
+    unset($info['dependencies']);
+  }
   return $info;
 }
 
@@ -130,7 +133,7 @@ function build_module_get_implemented_hooks() {
     return array();
   }
   $hooks = _string_to_array($hooks);
-  return $hooks;
+  return array_filter($hooks);
 }
 
 /**
@@ -188,7 +191,7 @@ function build_module() {
     $function .= ' * Implementation of hook_' . $hook . PHP_EOL;
     $function .= ' */' . PHP_EOL;
     $args = isset($hooks[$hook]) ? $hooks[$hook] : '';
-    $function .= "function {$name}_{$hook} ($args) {" . PHP_EOL . PHP_EOL;
+    $function .= "function {$name}_{$hook}($args) {" . PHP_EOL . PHP_EOL;
     $function .= '}' . PHP_EOL;
     if (!file_exists("$dir/$name.$file")) {
       file_put_contents("$dir/$name.$file", '<?php ' . PHP_EOL);
